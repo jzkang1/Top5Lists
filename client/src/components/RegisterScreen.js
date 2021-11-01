@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
 import Avatar from '@mui/material/Avatar';
@@ -11,11 +11,14 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Modal from '@mui/material/Modal';
 import { GlobalStoreContext } from '../store'
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext)
+
+    const [registerError, setRegisterError] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -27,6 +30,19 @@ export default function RegisterScreen() {
             password: formData.get('password'),
             passwordVerify: formData.get('passwordVerify')
         }, store);
+    };
+
+    const registerErrorStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        "text-align": "center"
     };
 
     return (
@@ -120,6 +136,28 @@ export default function RegisterScreen() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
+
+
+                <Modal
+                    open={auth.registerError}
+                    onClose={(event) => {setRegisterError(false)}}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={registerErrorStyle}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        One of your fields was invalid. Please try again.
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        REGISTER_ERROR
+                    </Typography>
+                    </Box>
+                </Modal>
+
+
+
+
+
             </Container>
     );
 }

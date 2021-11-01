@@ -41,7 +41,7 @@ registerUser = async (req, res) => {
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             return res
-                .status(400)
+                .status(100)
                 .json({
                     success: false,
                     errorMessage: "An account with this email address already exists."
@@ -69,10 +69,12 @@ registerUser = async (req, res) => {
             user: {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,
-                email: savedUser.email
+                email: savedUser.email,
+                passwordHash: savedUser.passwordHash
             }
         }).send();
     } catch (err) {
+        console.log("SHALOM");
         console.error(err);
         res.status(500).send();
     }

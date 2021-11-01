@@ -3,18 +3,20 @@ import { useHistory } from 'react-router-dom'
 import api from '../api'
 
 const AuthContext = createContext();
-console.log("create AuthContext: " + AuthContext);
+//console.log("create AuthContext: " + AuthContext);
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
-    REGISTER_USER: "REGISTER_USER"
+    REGISTER_USER: "REGISTER_USER",
+    SET_REGISTER_ERROR: "SET_REGISTER_ERROR"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        registerError: false
     });
     const history = useHistory();
 
@@ -28,14 +30,23 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    registerError: auth.registerError
                 });
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    registerError: auth.registerError
                 })
+            }
+            case AuthActionType.SET_REGISTER_ERROR: {
+                return setAuth({
+                    user: auth.user,
+                    loggedIn: auth.loggedIn,
+                    registerError: payload.registerError
+                });
             }
             default:
                 return auth;
@@ -56,7 +67,7 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(userData, store) {
-        const response = await api.registerUser(userData);      
+        const response = await api.registerUser(userData);
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
@@ -66,6 +77,13 @@ function AuthContextProvider(props) {
             })
             history.push("/");
             store.loadIdNamePairs();
+        } else {
+            authReducer({
+                type: AuthActionType.SET_REGISTER_ERROR,
+                payload: {
+                    registerError: true
+                }
+            });
         }
     }
 
