@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import AuthContext from '../auth'
-import Copyright from './Copyright'
+import AuthContext from '../auth';
+import Copyright from './Copyright';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,11 +12,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
-import { GlobalStoreContext } from '../store'
+import { GlobalStoreContext } from '../store';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
-    const { store } = useContext(GlobalStoreContext)
+    const { store } = useContext(GlobalStoreContext);
 
     const [registerError, setRegisterError] = useState(false);
 

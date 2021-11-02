@@ -74,9 +74,22 @@ registerUser = async (req, res) => {
             }
         }).send();
     } catch (err) {
-        console.log("SHALOM");
         console.error(err);
         res.status(500).send();
+    }
+}
+
+login = async (req, res) => {
+    const { email, password } = req.body;
+
+    const existingUser = await User.findOne({ email: email });
+    const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
+
+    if (correctPass) {
+        return res.status(200).json({
+            success: true,
+            user: existingUser
+        });
     }
 }
 

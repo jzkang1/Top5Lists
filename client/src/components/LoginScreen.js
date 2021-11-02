@@ -12,13 +12,17 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { GlobalStoreContext } from '../store';
+import { AuthContextProvider } from '../auth';
+import { useContext } from 'react';
+
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        The Top 5 Lister
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -29,15 +33,19 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+	const { store } = useContext(GlobalStoreContext);
+  const { auth } = useContext(AuthContextProvider);
+
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		const data = new FormData(event.currentTarget);
+		
+		auth.loginUser({
+			email: data.get('email'),
+			password: data.get('password')
+		}, store);
+	};
 
   return (
     <ThemeProvider theme={theme}>

@@ -9,7 +9,8 @@ const AuthContext = createContext();
 export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     REGISTER_USER: "REGISTER_USER",
-    SET_REGISTER_ERROR: "SET_REGISTER_ERROR"
+    SET_REGISTER_ERROR: "SET_REGISTER_ERROR",
+    LOGIN_USER: "LOGIN_USER"
 }
 
 function AuthContextProvider(props) {
@@ -21,7 +22,9 @@ function AuthContextProvider(props) {
     const history = useHistory();
 
     useEffect(() => {
-        auth.getLoggedIn();
+        if (auth.user !== null) {
+            auth.getLoggedIn();
+        }
     }, []);
 
     const authReducer = (action) => {
@@ -87,10 +90,20 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginUser = async function(userData, store) {
+        const response = await api.loginUser(userData);
+        if (response.status === 200) {
+            authReducer({
+                type: AuthActionType.LOGIN_USER,
+                payload: {
+                    user: response.data.user
+                }
+            })
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{
-            auth
-        }}>
+        <AuthContext.Provider value={{auth}}>
             {props.children}
         </AuthContext.Provider>
     );
