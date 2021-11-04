@@ -11,7 +11,8 @@ export const AuthActionType = {
     REGISTER_USER: "REGISTER_USER",
     SET_REGISTER_ERROR: "SET_REGISTER_ERROR",
     LOGIN_USER: "LOGIN_USER",
-    SET_LOGIN_ERROR: "SET_LOGIN_ERROR"
+    SET_LOGIN_ERROR: "SET_LOGIN_ERROR",
+    LOGOUT_USER: "LOGOUT_USER"
 }
 
 function AuthContextProvider(props) {
@@ -68,6 +69,14 @@ function AuthContextProvider(props) {
                     loggedIn: false,
                     registerError: null,
                     loginError: payload.loginError
+                });
+            }
+            case AuthActionType.LOGOUT_USER: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    registerError: null,
+                    loginError: null
                 });
             }
             default:
@@ -166,6 +175,13 @@ function AuthContextProvider(props) {
                 loginError: null
             }
         });
+    }
+
+    auth.logoutUser = function() {
+        authReducer({
+            type: AuthActionType.LOGOUT_USER,
+            payload: null
+        })
     }
 
     return (
