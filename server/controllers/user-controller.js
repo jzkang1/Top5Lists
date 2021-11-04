@@ -22,7 +22,9 @@ registerUser = async (req, res) => {
         if (!firstName || !lastName || !email || !password || !passwordVerify) {
             return res
                 .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+                .json({
+                    errorMessage: "Please enter all required fields."
+                });
         }
         if (password.length < 8) {
             return res
@@ -36,9 +38,13 @@ registerUser = async (req, res) => {
                 .status(400)
                 .json({
                     errorMessage: "Please enter the same password twice."
-                }).send();
+                });
         }
+        
         const existingUser = await User.findOne({ email: email });
+        console.log(existingUser);
+
+
         if (existingUser) {
             return res
                 .status(100)
@@ -55,9 +61,7 @@ registerUser = async (req, res) => {
         const newUser = new User({
             firstName, lastName, email, passwordHash
         });
-        const savedUser = await newUser.save().then(async () => {
-
-        });
+        const savedUser = await newUser.save();
 
         // LOGIN THE USER
         const token = auth.signToken(savedUser);
@@ -87,13 +91,6 @@ loginUser = async (req, res) => {
 
         const existingUser = await User.findOne({ email: email });
 
-        if (existingUser === null) {
-            return res.status(400).json({
-                errorMessage: "Invalid email or password"
-            });
-        }
-
-        console.log("SHALOMO1");
         console.log(existingUser);
         const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
 

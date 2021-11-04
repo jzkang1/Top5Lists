@@ -81,6 +81,9 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
+        if (loggedIn) {
+            return <div>{(auth.user.firstName[0] + auth.user.lastName[0]).toUpperCase()}</div>
+        }
         return <AccountCircle />;
     }
 

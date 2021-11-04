@@ -1,4 +1,4 @@
-import * as React from 'react';
+//import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Modal from '@mui/material/Modal';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
@@ -47,7 +48,25 @@ export default function SignInSide() {
 		}, store);
 	};
 
-  return (
+    const handleCloseLoginErrorModal = (event) => {
+        event.stopPropagation();
+        auth.closeLoginError();
+    }
+
+    const loginErrorStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        textAlign: "center"
+    };
+
+    return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
@@ -127,10 +146,30 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
+
+              <Modal
+                    open={auth.loginError}
+                    onClose={handleCloseLoginErrorModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx ={loginErrorStyle}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Invalid email or password. Please try again.
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        LOGIN_ERROR
+                    </Typography>
+                    </Box>
+                </Modal>
+
+
+
+
             </Box>
           </Box>
         </Grid>
       </Grid>
     </ThemeProvider>
-  );
+    );
 }

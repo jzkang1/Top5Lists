@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Copyright from './Copyright';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -29,6 +29,7 @@ export default function RegisterScreen() {
             passwordVerify: formData.get('passwordVerify')
         }, store);
     };
+
 
     const handleCloseRegisterErrorModal = (event) => {
         event.stopPropagation();
@@ -140,7 +141,6 @@ export default function RegisterScreen() {
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
 
-
                 <Modal
                     open={auth.registerError}
                     onClose={handleCloseRegisterErrorModal}
@@ -156,10 +156,6 @@ export default function RegisterScreen() {
                     </Typography>
                     </Box>
                 </Modal>
-
-
-
-
 
             </Container>
     );
