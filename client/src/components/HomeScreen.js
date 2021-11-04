@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 import ListCard from './ListCard.js'
 import { Fab, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
@@ -15,10 +16,11 @@ import Button from '@mui/material/Button';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         store.loadIdNamePairs();
-    });
+    }, [auth]);
 
     function handleCreateNewList() {
         store.createNewList();
@@ -43,11 +45,12 @@ const HomeScreen = () => {
     }
 
     function handleConfirmDeleteList(event) {
-
+        event.stopPropagation();
+        
     }
 
     function handleCancelDeleteList(event) {
-
+        event.stopPropagation();
     }
 
     let listCard = "";

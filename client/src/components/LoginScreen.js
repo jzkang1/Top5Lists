@@ -148,23 +148,19 @@ export default function SignInSide() {
               <Copyright sx={{ mt: 5 }} />
 
               <Modal
-                    open={auth.loginError}
-                    onClose={handleCloseLoginErrorModal}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx ={loginErrorStyle}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Invalid email or password. Please try again.
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        LOGIN_ERROR
-                    </Typography>
-                    </Box>
-                </Modal>
-
-
-
+                open={auth.loginError !== null}
+                onClose={handleCloseLoginErrorModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box sx ={loginErrorStyle}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    {auth.loginError}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Please try again.
+                </Typography>
+                </Box>
+              </Modal>
 
             </Box>
           </Box>

@@ -30,7 +30,6 @@ export default function RegisterScreen() {
         }, store);
     };
 
-
     const handleCloseRegisterErrorModal = (event) => {
         event.stopPropagation();
         auth.closeRegisterError();
@@ -142,17 +141,17 @@ export default function RegisterScreen() {
                 <Copyright sx={{ mt: 5 }} />
 
                 <Modal
-                    open={auth.registerError}
+                    open={auth.registerError !== null}
                     onClose={handleCloseRegisterErrorModal}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={registerErrorStyle}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        One of your fields was invalid. Please try again.
+                        {auth.registerError}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        REGISTER_ERROR
+                        Please try again.
                     </Typography>
                     </Box>
                 </Modal>

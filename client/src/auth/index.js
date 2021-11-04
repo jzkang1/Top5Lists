@@ -18,8 +18,8 @@ function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        registerError: false,
-        loginError: false
+        registerError: null,
+        loginError: null
     });
     const history = useHistory();
 
@@ -34,16 +34,16 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    registerError: false,
-                    loginError: false
+                    registerError: null,
+                    loginError: null
                 });
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    registerError: false,
-                    loginError: false
+                    registerError: null,
+                    loginError: null
                 })
             }
             case AuthActionType.SET_REGISTER_ERROR: {
@@ -51,23 +51,24 @@ function AuthContextProvider(props) {
                     user: auth.user,
                     loggedIn: auth.loggedIn,
                     registerError: payload.registerError,
-                    loginError: false
+                    loginError: null
                 });
             }
             case AuthActionType.LOGIN_USER: { 
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    registerError: false
+                    registerError: null,
+                    loginError: null
                 })
             }
             case AuthActionType.SET_LOGIN_ERROR: {
                 return setAuth({
                     user: auth.user,
                     loggedIn: false,
-                    registerError: false,
+                    registerError: null,
                     loginError: payload.loginError
-                })
+                });
             }
             default:
                 return auth;
@@ -88,6 +89,7 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(userData, store) {
+        console.log("shalomo");
         try {
             const response = await api.registerUser(userData);
             if (response.status === 200) {
@@ -96,14 +98,14 @@ function AuthContextProvider(props) {
                     payload: {
                         user: response.data.user
                     }
-                })
+                });
                 history.push("/");
                 store.loadIdNamePairs();
             } else {
                 authReducer({
                     type: AuthActionType.SET_REGISTER_ERROR,
                     payload: {
-                        registerError: true
+                        registerError: response.data.errorMessage
                     }
                 });
             }
@@ -111,7 +113,7 @@ function AuthContextProvider(props) {
             authReducer({
                 type: AuthActionType.SET_REGISTER_ERROR,
                 payload: {
-                    registerError: true
+                    registerError: err.response.data.errorMessage
                 }
             });
         }
@@ -121,9 +123,9 @@ function AuthContextProvider(props) {
         authReducer({
             type: AuthActionType.SET_REGISTER_ERROR,
             payload: {
-                registerError: false
+                registerError: null
             }
-        })
+        });
     }
 
     auth.loginUser = async function(userData, store) {
@@ -135,27 +137,35 @@ function AuthContextProvider(props) {
                     payload: {
                         user: response.data.user
                     }
-                })
+                });
                 history.push("/");
                 store.loadIdNamePairs();
+            } else {
+                console.log("400 status didnt throw an error. Nice!");
+                authReducer({
+                    type: AuthActionType.SET_LOGIN_ERROR,
+                    payload: {
+                        loginError: response.data.loginError
+                    }
+                });
             }
         } catch (err) {
             authReducer({
                 type: AuthActionType.SET_LOGIN_ERROR,
                 payload: {
-                    loginError: true
+                    loginError: err.response.data.errorMessage
                 }
-            })
+            });
         }
     }
 
     auth.closeLoginError = function() {
         authReducer({
-            type: AuthActionType.SET_REGISTER_ERROR,
+            type: AuthActionType.SET_LOGIN_ERROR,
             payload: {
-                loginError: false
+                loginError: null
             }
-        })
+        });
     }
 
     return (

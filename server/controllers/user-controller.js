@@ -13,7 +13,7 @@ getLoggedIn = async (req, res) => {
                 email: loggedInUser.email
             }
         }).send();
-    })
+    });
 }
 
 registerUser = async (req, res) => {
@@ -37,7 +37,7 @@ registerUser = async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    errorMessage: "Please enter the same password twice."
+                    errorMessage: "Passwords don't match"
                 });
         }
         
@@ -89,16 +89,23 @@ loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "Please enter all required fields."
+                });
+        }
+
         const existingUser = await User.findOne({ email: email });
 
-        console.log(existingUser);
         const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
 
         if (correctPass) {
             return res.status(200).json({
                 success: true,
                 user: existingUser
-            }).send();
+            });
         }
 
         return res.status(400).json({
