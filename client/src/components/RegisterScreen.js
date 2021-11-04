@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import AuthContext from '../auth';
 import Copyright from './Copyright';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -12,13 +11,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
-import { GlobalStoreContext } from '../store';
+import GlobalStoreContext from '../store';
+import AuthContext from '../auth';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
-
-    const [registerError, setRegisterError] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -32,6 +30,11 @@ export default function RegisterScreen() {
         }, store);
     };
 
+    const handleCloseRegisterErrorModal = (event) => {
+        event.stopPropagation();
+        auth.closeRegisterError();
+    }
+
     const registerErrorStyle = {
         position: 'absolute',
         top: '50%',
@@ -42,7 +45,7 @@ export default function RegisterScreen() {
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
-        "text-align": "center"
+        textAlign: "center"
     };
 
     return (
@@ -140,7 +143,7 @@ export default function RegisterScreen() {
 
                 <Modal
                     open={auth.registerError}
-                    onClose={(event) => {setRegisterError(false)}}
+                    onClose={handleCloseRegisterErrorModal}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >

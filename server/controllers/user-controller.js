@@ -36,7 +36,7 @@ registerUser = async (req, res) => {
                 .status(400)
                 .json({
                     errorMessage: "Please enter the same password twice."
-                })
+                }).send();
         }
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
@@ -55,7 +55,9 @@ registerUser = async (req, res) => {
         const newUser = new User({
             firstName, lastName, email, passwordHash
         });
-        const savedUser = await newUser.save();
+        const savedUser = await newUser.save().then(async () => {
+
+        });
 
         // LOGIN THE USER
         const token = auth.signToken(savedUser);
@@ -79,21 +81,41 @@ registerUser = async (req, res) => {
     }
 }
 
-login = async (req, res) => {
-    const { email, password } = req.body;
+loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    const existingUser = await User.findOne({ email: email });
-    const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
+        const existingUser = await User.findOne({ email: email });
 
-    if (correctPass) {
-        return res.status(200).json({
-            success: true,
-            user: existingUser
+        if (existingUser === null) {
+            return res.status(400).json({
+                errorMessage: "Invalid email or password"
+            });
+        }
+
+        console.log("SHALOMO1");
+        console.log(existingUser);
+        const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
+
+        if (correctPass) {
+            return res.status(200).json({
+                success: true,
+                user: existingUser
+            }).send();
+        }
+
+        return res.status(400).json({
+            errorMessage: "Invalid email or password"
+        });
+    } catch (err) {
+        return res.status(400).json({
+            errorMessage: "Invalid email or password"
         });
     }
 }
 
 module.exports = {
     getLoggedIn,
-    registerUser
+    registerUser,
+    loginUser
 }
