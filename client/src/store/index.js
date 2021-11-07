@@ -58,7 +58,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
                 return setStore({
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.top5List,
+                    currentList: null,
                     newListCounter: store.newListCounter,
                     isListNameEditActive: false,
                     isItemEditActive: false,
@@ -174,7 +174,12 @@ function GlobalStoreContextProvider(props) {
                     async function getListPairs(top5List) {
                         response = await api.getTop5ListPairs();
                         if (response.data.success) {
-                            let pairsArray = response.data.idNamePairs;
+                            let pairsArray = [];
+                            for (let pair of response.data.idNamePairs) {
+                                if (pair.ownerEmail === auth.user.email) {
+                                    pairsArray.push(pair);
+                                }
+                            }
                             storeReducer({
                                 type: GlobalStoreActionType.CHANGE_LIST_NAME,
                                 payload: {
@@ -229,15 +234,18 @@ function GlobalStoreContextProvider(props) {
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
-    store.loadIdNamePairs = async function () {
+    // takes in a user id so that we only load our own lists
+    store.loadIdNamePairs = async function() {
         try {
             const response = await api.getTop5ListPairs();
             if (response.data.success) {
-                let pairsArray = response.data.idNamePairs;
-                // pairsArray = pairsArray.filter(async (pair) => {
-                //     let lst = await api.getTop5ListById(pair.id)
-                //     return lst.ownerEmail === auth.user.email;
-                // });
+                let pairsArray = [];
+
+                for (let pair of response.data.idNamePairs) {
+                    if (pair.ownerEmail === auth.user.email) {
+                        pairsArray.push(pair);
+                    }
+                }
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
@@ -247,7 +255,7 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         } catch (err) {
-            console.log("API FAILED TO GET THE LIST PAIRS2");
+            console.log("failed to get list pairs2: " + err);
         }
     }
 

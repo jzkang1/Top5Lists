@@ -100,7 +100,13 @@ loginUser = async (req, res) => {
         const correctPass = await bcrypt.compare(password, existingUser.passwordHash);
 
         if (correctPass) {
-            return res.status(200).json({
+            const token = auth.signToken(existingUser);
+
+            await res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            }).status(200).json({
                 success: true,
                 user: existingUser
             });
@@ -114,6 +120,10 @@ loginUser = async (req, res) => {
             errorMessage: "Invalid email or password"
         });
     }
+}
+
+logoutUser = async (req, res) => {
+    console.log("SHALOMO LOGOUT")
 }
 
 module.exports = {

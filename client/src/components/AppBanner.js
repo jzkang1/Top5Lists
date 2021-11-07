@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
@@ -17,6 +17,12 @@ export default function AppBanner() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+
+    useEffect(() => {
+        if (!auth.loggedIn) {
+            auth.getLoggedIn(store);
+        }
+    });
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -69,7 +75,7 @@ export default function AppBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}><Link to='/'>Logout</Link></MenuItem>
         </Menu>        
 
     let editToolbar = "";

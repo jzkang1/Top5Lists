@@ -18,10 +18,6 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
-    // useEffect(() => {
-    //     store.loadIdNamePairs();
-    // }, [store]);
-
     function handleCreateNewList() {
         store.createNewList();
     }

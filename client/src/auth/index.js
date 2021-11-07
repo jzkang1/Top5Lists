@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, } from "react";
 import { useHistory } from 'react-router-dom'
 import api from '../api'
 
@@ -23,10 +23,6 @@ function AuthContextProvider(props) {
         loginError: null
     });
     const history = useHistory();
-
-    // useEffect(() => {
-    //     auth.getLoggedIn();
-    // });
 
     const authReducer = (action) => {
         const { type, payload } = action;
@@ -84,16 +80,17 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.getLoggedIn = async function () {
+    auth.getLoggedIn = async function(store) {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
             authReducer({
-                type: AuthActionType.SET_LOGGED_IN,
+                type: AuthActionType.GET_LOGGED_IN,
                 payload: {
                     loggedIn: response.data.loggedIn,
                     user: response.data.user
                 }
             });
+            store.loadIdNamePairs();
         }
     }
 
@@ -149,7 +146,6 @@ function AuthContextProvider(props) {
                 history.push("/");
                 store.loadIdNamePairs();
             } else {
-                console.log("400 status didnt throw an error. Nice!");
                 authReducer({
                     type: AuthActionType.SET_LOGIN_ERROR,
                     payload: {
@@ -176,7 +172,9 @@ function AuthContextProvider(props) {
         });
     }
 
-    auth.logoutUser = function() {
+    auth.logoutUser = async function() {
+        let loggedIn = await api.getLoggedIn();
+        loggedIn.clearCookie("token");
         authReducer({
             type: AuthActionType.LOGOUT_USER,
             payload: null
