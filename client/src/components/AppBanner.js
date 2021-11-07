@@ -52,6 +52,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
         </Menu>
     );
+
     const loggedInMenu = 
         <Menu
             anchorEl={anchorEl}
@@ -110,14 +111,12 @@ export default function AppBanner() {
                             onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            { getAccountMenu(auth.loggedIn) }
+                            {getAccountMenu(auth.loggedIn) }
                         </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>
-            {
-                menu
-            }
+            {menu}
         </Box>
     );
 }

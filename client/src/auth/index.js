@@ -24,9 +24,9 @@ function AuthContextProvider(props) {
     });
     const history = useHistory();
 
-    useEffect(() => {
-        auth.getLoggedIn();
-    });
+    // useEffect(() => {
+    //     auth.getLoggedIn();
+    // });
 
     const authReducer = (action) => {
         const { type, payload } = action;
@@ -98,7 +98,6 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(userData, store) {
-        console.log("shalomo");
         try {
             const response = await api.registerUser(userData);
             if (response.status === 200) {
@@ -181,7 +180,7 @@ function AuthContextProvider(props) {
         authReducer({
             type: AuthActionType.LOGOUT_USER,
             payload: null
-        })
+        });
     }
 
     return (

@@ -37,14 +37,12 @@ registerUser = async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    errorMessage: "Passwords don't match"
+                    errorMessage: "Passwords don't match."
                 });
         }
         
         const existingUser = await User.findOne({ email: email });
-        console.log(existingUser);
-
-
+        
         if (existingUser) {
             return res
                 .status(100)

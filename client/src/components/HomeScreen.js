@@ -18,9 +18,9 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
-    useEffect(() => {
-        store.loadIdNamePairs();
-    }, [auth]);
+    // useEffect(() => {
+    //     store.loadIdNamePairs();
+    // }, [store]);
 
     function handleCreateNewList() {
         store.createNewList();
@@ -46,11 +46,12 @@ const HomeScreen = () => {
 
     function handleConfirmDeleteList(event) {
         event.stopPropagation();
-        
+        store.deleteMarkedList();
     }
 
     function handleCancelDeleteList(event) {
         event.stopPropagation();
+        store.unmarkListForDeletion();
     }
 
     let listCard = "";

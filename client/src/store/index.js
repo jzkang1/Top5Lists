@@ -200,6 +200,7 @@ function GlobalStoreContextProvider(props) {
         
         tps.clearAllTransactions();
         history.push("/");
+        store.loadIdNamePairs();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -217,8 +218,7 @@ function GlobalStoreContextProvider(props) {
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: newList
-            }
-            );
+            });
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
             history.push("/top5list/" + newList._id);
@@ -230,16 +230,24 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = async function () {
-        const response = await api.getTop5ListPairs();
-        if (response.data.success) {
-            let pairsArray = response.data.idNamePairs;
-            storeReducer({
-                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                payload: pairsArray
-            });
-        }
-        else {
-            console.log("API FAILED TO GET THE LIST PAIRS");
+        try {
+            const response = await api.getTop5ListPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                // pairsArray = pairsArray.filter(async (pair) => {
+                //     let lst = await api.getTop5ListById(pair.id)
+                //     return lst.ownerEmail === auth.user.email;
+                // });
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        } catch (err) {
+            console.log("API FAILED TO GET THE LIST PAIRS2");
         }
     }
 

@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
@@ -153,12 +155,11 @@ export default function SignInSide() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx ={loginErrorStyle}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                    {auth.loginError}
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Please try again.
-                </Typography>
+                    <Stack spacing={2} direction="column">
+                        <Alert severity="error">{auth.loginError}</Alert>
+
+                        <Button variant="contained" onClick={handleCloseLoginErrorModal}>Close</Button>
+                    </Stack>
                 </Box>
               </Modal>
 

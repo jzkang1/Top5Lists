@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
 
@@ -147,12 +149,18 @@ export default function RegisterScreen() {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={registerErrorStyle}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Stack spacing={2} direction="column">
+                        <Alert severity="error">{auth.registerError}</Alert>
+
+                        <Button variant="contained" onClick={handleCloseRegisterErrorModal}>Close</Button>
+                    </Stack>
+                        
+                    {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                         {auth.registerError}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         Please try again.
-                    </Typography>
+                    </Typography> */}
                     </Box>
                 </Modal>
 
