@@ -38,6 +38,7 @@ function WorkspaceScreen() {
                 }
             </List>;
     }
+    
     return (
         <div id="top5-workspace">
             <div id="workspace-edit">

@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 function Top5Item(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
-    const [draggedTo, setDraggedTo] = useState(0);
+    const [draggedTo, setDraggedTo] = useState(false);
 
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
@@ -50,6 +50,7 @@ function Top5Item(props) {
 
     function handleEdit() {
         setEditActive(true);
+        store.setItemEditActive();
     }
 
     function handleOnKeyDown(event) {
@@ -80,6 +81,10 @@ function Top5Item(props) {
             >
                 <TextField
                     sx={{ p: 1, flexGrow: 1}}
+                    margin="normal"
+                    inputProps={{style: {fontSize: 48}}}
+                    InputLabelProps={{style: {fontSize: 24}}}
+                    autoFocus
                     defaultValue={props.text}
                     onKeyDown={handleOnKeyDown}
                 >
@@ -87,6 +92,22 @@ function Top5Item(props) {
                 </TextField>
             </ListItem>
         );
+        // <TextField
+        // margin="normal"
+        // required
+        // fullWidth
+        // id={"list-" + idNamePair._id}
+        // label="Top 5 List Name"
+        // name="name"
+        // autoComplete="Top 5 List Name"
+        // className='list-card'
+        // onKeyPress={handleKeyPress}
+        // onChange={handleUpdateText}
+        // defaultValue={idNamePair.name}
+        // inputProps={{style: {fontSize: 48}}}
+        // InputLabelProps={{style: {fontSize: 24}}}
+        // autoFocus
+        ///>
     }
 
     return (

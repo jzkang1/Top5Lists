@@ -12,7 +12,7 @@ getLoggedIn = async (req, res) => {
                 lastName: loggedInUser.lastName,
                 email: loggedInUser.email
             }
-        }).send();
+        });
     });
 }
 
@@ -124,10 +124,15 @@ loginUser = async (req, res) => {
 
 logoutUser = async (req, res) => {
     console.log("SHALOMO LOGOUT")
+    console.log(res.clearCookie);
+    return res.clearCookie("token").status(200).json({
+        success: true
+    });
 }
 
 module.exports = {
     getLoggedIn,
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }

@@ -146,7 +146,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
                 return setStore({
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: null,
                     newListCounter: store.newListCounter,
                     isListNameEditActive: true,
                     isItemEditActive: false,
@@ -164,35 +164,47 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = async function (id, newName) {
-        let response = await api.getTop5ListById(id);
-        if (response.data.success) {
-            let top5List = response.data.top5List;
-            top5List.name = newName;
-            async function updateList(top5List) {
-                response = await api.updateTop5ListById(top5List._id, top5List);
-                if (response.data.success) {
-                    async function getListPairs(top5List) {
-                        response = await api.getTop5ListPairs();
+        try {
+            let response = await api.getTop5ListById(id);
+            if (response.data.success) {
+                let top5List = response.data.top5List;
+                top5List.name = newName;
+                async function updateList(top5List) {
+                    try {
+                        response = await api.updateTop5ListById(top5List._id, top5List);
                         if (response.data.success) {
-                            let pairsArray = [];
-                            for (let pair of response.data.idNamePairs) {
-                                if (pair.ownerEmail === auth.user.email) {
-                                    pairsArray.push(pair);
+                            async function getListPairs(top5List) {
+                                try {
+                                    response = await api.getTop5ListPairs();
+                                    if (response.data.success) {
+                                        let pairsArray = [];
+                                        for (let pair of response.data.idNamePairs) {
+                                            if (pair.ownerEmail === auth.user.email) {
+                                                pairsArray.push(pair);
+                                            }
+                                        }
+                                        storeReducer({
+                                            type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                            payload: {
+                                                idNamePairs: pairsArray,
+                                                top5List: top5List
+                                            }
+                                        });
+                                    }
+                                } catch (err) {
+
                                 }
                             }
-                            storeReducer({
-                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                                payload: {
-                                    idNamePairs: pairsArray,
-                                    top5List: top5List
-                                }
-                            });
+                            getListPairs(top5List);
                         }
+                    } catch (err) {
+
                     }
-                    getListPairs(top5List);
                 }
+                updateList(top5List);
             }
-            updateList(top5List);
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -379,18 +391,18 @@ function GlobalStoreContextProvider(props) {
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
-    store.setIsListNameEditActive = function () {
+    store.setIsListNameEditActive = function(editActive) {
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: null
+            payload: editActive
         });
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING AN ITEM
-    store.setIsItemEditActive = function () {
+    store.setIsItemEditActive = function (editActive) {
         storeReducer({
             type: GlobalStoreActionType.SET_ITEM_EDIT_ACTIVE,
-            payload: null
+            payload: editActive
         });
     }
 

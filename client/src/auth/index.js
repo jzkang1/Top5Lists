@@ -81,16 +81,20 @@ function AuthContextProvider(props) {
     }
 
     auth.getLoggedIn = async function(store) {
-        const response = await api.getLoggedIn();
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.GET_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
-            store.loadIdNamePairs();
+        try {
+            const response = await api.getLoggedIn();
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+                store.loadIdNamePairs();
+            }
+        } catch (err) {
+            
         }
     }
 
@@ -173,12 +177,19 @@ function AuthContextProvider(props) {
     }
 
     auth.logoutUser = async function() {
-        let loggedIn = await api.getLoggedIn();
-        loggedIn.clearCookie("token");
+        try {
+            let response = await api.getLoggedIn();
+            if (response.data.loggedIn) {
+                await api.logoutUser();
+            }
+        } catch (err) {
+
+        }
         authReducer({
             type: AuthActionType.LOGOUT_USER,
-            payload: null
+            payload: {}
         });
+        history.push("/");
     }
 
     return (
