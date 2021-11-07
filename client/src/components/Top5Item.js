@@ -49,7 +49,14 @@ function Top5Item(props) {
     }
 
     function handleEdit() {
-        
+        setEditActive(true);
+    }
+
+    function handleOnKeyDown(event) {
+        if (event.key === "Enter") {
+            store.updateItem(props.index, event.target.value);
+            setEditActive(false);
+        }
     }
 
     let { index } = props;
@@ -57,6 +64,29 @@ function Top5Item(props) {
     let itemClass = "top5-item";
     if (draggedTo) {
         itemClass = "top5-item-dragged-to";
+    }
+
+    if (editActive) {
+        return (
+            <ListItem
+                id={'item-' + (index+1)}
+                key={props.key}
+                className={itemClass}
+                sx={{ display: 'flex', p: 1 }}
+                style={{
+                    fontSize: '48pt',
+                    width: '100%'
+                }}
+            >
+                <TextField
+                    sx={{ p: 1, flexGrow: 1}}
+                    defaultValue={props.text}
+                    onKeyDown={handleOnKeyDown}
+                >
+                    {props.text}
+                </TextField>
+            </ListItem>
+        );
     }
 
     return (
