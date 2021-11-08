@@ -151,7 +151,6 @@ export default function SignInSide() {
 
               <Modal
                 open={auth.loginError !== null}
-                onClose={handleCloseLoginErrorModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx ={loginErrorStyle}>

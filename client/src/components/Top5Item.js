@@ -93,22 +93,6 @@ function Top5Item(props) {
                 </TextField>
             </ListItem>
         );
-        // <TextField
-        // margin="normal"
-        // required
-        // fullWidth
-        // id={"list-" + idNamePair._id}
-        // label="Top 5 List Name"
-        // name="name"
-        // autoComplete="Top 5 List Name"
-        // className='list-card'
-        // onKeyPress={handleKeyPress}
-        // onChange={handleUpdateText}
-        // defaultValue={idNamePair.name}
-        // inputProps={{style: {fontSize: 48}}}
-        // InputLabelProps={{style: {fontSize: 24}}}
-        // autoFocus
-        ///>
     }
 
     return (

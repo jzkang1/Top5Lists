@@ -144,7 +144,6 @@ export default function RegisterScreen() {
 
                 <Modal
                     open={auth.registerError !== null}
-                    onClose={handleCloseRegisterErrorModal}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
