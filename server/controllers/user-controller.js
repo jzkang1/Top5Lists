@@ -76,7 +76,7 @@ registerUser = async (req, res) => {
                 email: savedUser.email,
                 passwordHash: savedUser.passwordHash
             }
-        }).send();
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send();
@@ -123,8 +123,6 @@ loginUser = async (req, res) => {
 }
 
 logoutUser = async (req, res) => {
-    console.log("SHALOMO LOGOUT")
-    console.log(res.clearCookie);
     return res.clearCookie("token").status(200).json({
         success: true
     });

@@ -269,7 +269,7 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         } catch (err) {
-            console.log("failed to get list pairs2: " + err);
+            console.log("failed to get list pairs: " + err);
         }
     }
 
