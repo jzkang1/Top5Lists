@@ -53,6 +53,7 @@ function GlobalStoreContextProvider(props) {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
+        
         switch (type) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
@@ -148,7 +149,7 @@ function GlobalStoreContextProvider(props) {
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    isListNameEditActive: true,
+                    isListNameEditActive: payload.editActive,
                     isItemEditActive: false,
                     listMarkedForDeletion: null
                 });
@@ -192,13 +193,13 @@ function GlobalStoreContextProvider(props) {
                                         });
                                     }
                                 } catch (err) {
-
+                                    console.log(err);
                                 }
                             }
                             getListPairs(top5List);
                         }
                     } catch (err) {
-
+                        console.log(err);
                     }
                 }
                 updateList(top5List);
@@ -206,6 +207,7 @@ function GlobalStoreContextProvider(props) {
         } catch (err) {
             console.log(err);
         }
+        store.setIsListNameEditActive(false);
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
@@ -331,12 +333,14 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
     }
 
+    // 1 <= index <= 5
     store.addUpdateItemTransaction = function (index, newText) {
         let oldText = store.currentList.items[index];
         let transaction = new UpdateItem_Transaction(store, index, oldText, newText);
         tps.addTransaction(transaction);
     }
 
+    // 1 <= start, end <= 5
     store.moveItem = function (start, end) {
         start -= 1;
         end -= 1;
@@ -394,7 +398,9 @@ function GlobalStoreContextProvider(props) {
     store.setIsListNameEditActive = function(editActive) {
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: editActive
+            payload: {
+                editActive : editActive
+            }
         });
     }
 
@@ -402,7 +408,9 @@ function GlobalStoreContextProvider(props) {
     store.setIsItemEditActive = function (editActive) {
         storeReducer({
             type: GlobalStoreActionType.SET_ITEM_EDIT_ACTIVE,
-            payload: editActive
+            payload: {
+                editActive : editActive
+            }
         });
     }
 

@@ -73,6 +73,7 @@ const HomeScreen = () => {
                 aria-label="add"
                 id="add-list-button"
                 onClick={handleCreateNewList}
+                disabled={store.isListNameEditActive}
             >
                 <AddIcon />
             </Fab>

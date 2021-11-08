@@ -50,13 +50,14 @@ function Top5Item(props) {
 
     function handleEdit() {
         setEditActive(true);
-        store.setItemEditActive();
+        store.setIsItemEditActive(true);
     }
 
     function handleOnKeyDown(event) {
         if (event.key === "Enter") {
-            store.updateItem(props.index, event.target.value);
+            store.addUpdateItemTransaction(props.index, event.target.value);
             setEditActive(false);
+            store.setIsItemEditActive(false);
         }
     }
 
@@ -131,18 +132,18 @@ function Top5Item(props) {
                     handleDrop(event, (index+1))
                 }}
                 draggable="true"
-                sx={{ display: 'flex', p: 1 }}
+                // sx={{ display: "", p: 1 }}
                 style={{
                     fontSize: '48pt',
                     width: '100%'
                 }}
             >
             <Box sx={{ p: 1 }}>
-                <IconButton aria-label='edit'>
-                    <EditIcon
-                        style={{fontSize:'48pt'}}
-                        onClick={handleEdit}
-                        />
+                <IconButton
+                    aria-label='edit'
+                    onClick={handleEdit}
+                >
+                    <EditIcon style={{fontSize:'48pt'}}/>
                 </IconButton>
             </Box>
                 <Box sx={{ p: 1, flexGrow: 1 }}>{props.text}</Box>
