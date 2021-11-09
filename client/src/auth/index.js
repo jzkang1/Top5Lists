@@ -92,6 +92,7 @@ function AuthContextProvider(props) {
                     }
                 });
                 store.loadIdNamePairs();
+                history.push("/");
             }
         } catch (err) {
             
