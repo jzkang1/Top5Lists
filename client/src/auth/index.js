@@ -162,7 +162,7 @@ function AuthContextProvider(props) {
             authReducer({
                 type: AuthActionType.SET_LOGIN_ERROR,
                 payload: {
-                    loginError: err.response.data.errorMessage
+                    loginError: "Invalid email or password"
                 }
             });
         }

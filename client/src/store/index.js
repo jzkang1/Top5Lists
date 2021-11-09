@@ -176,7 +176,7 @@ function GlobalStoreContextProvider(props) {
                         if (response.data.success) {
                             async function getListPairs(top5List) {
                                 try {
-                                    response = await api.getTop5ListPairs();
+                                    response = await api.getTop5ListPairs({email: auth.user.email});
                                     if (response.data.success) {
                                         let pairsArray = [];
                                         for (let pair of response.data.idNamePairs) {
@@ -251,7 +251,7 @@ function GlobalStoreContextProvider(props) {
     // takes in a user id so that we only load our own lists
     store.loadIdNamePairs = async function() {
         try {
-            const response = await api.getTop5ListPairs();
+            const response = await api.getTop5ListPairs({email: auth.user.email});
             if (response.data.success) {
                 let pairsArray = [];
 
